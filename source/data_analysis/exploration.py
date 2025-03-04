@@ -7,28 +7,23 @@ import tensorflow as tf
 from tensorflow import keras
 import seaborn as sns
 from datetime import datetime
+from source.data_access.stock_data import Stock_Data
 
 import warnings
 warnings.filterwarnings("ignore")
 
-base_project_path: str = 'C:/Users/isaac/Winter25/stocks'
-
-stocks_file_path = os.path.join(base_project_path, 'data/all_stocks_5yr.csv')
+stock_data = Stock_Data()
+data = stock_data.data
 
 
 def testAndSampleData():
-    data = pd.read_csv(stocks_file_path, delimiter=',', on_bad_lines='skip')
     print(data.shape)
     print(data.sample(7))
 
 def dataInfo():
-    data = pd.read_csv(stocks_file_path, delimiter=',', on_bad_lines='skip')
-    data['date'] = pd.to_datetime(data['date'])
     data.info()
 
 def exploration():
-    data = pd.read_csv(stocks_file_path, delimiter=',', on_bad_lines='skip')
-    data['date'] = pd.to_datetime(data['date'])
 
     # Company list to track
     companies = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'NVDA', 'IBM']
@@ -55,12 +50,32 @@ def exploration():
         plt.title(f'{company} Volume')
         plt.tight_layout()
 
-    plt.show()
+    # plt.show()
+
+    # Open-close data for selected company
+    selected_company = 'MSFT'
+    company_data = data[data['Name'] == selected_company]
+
+    # Verify date range for MSFT
+    #print(company_data['date'].min(), company_data['date'].max())
+
+    # Filter data for prediction range
+    prediction_range = company_data.loc[(company_data['date'] > datetime(2013, 1, 1))
+                                        & (company_data['date'] < datetime(2018, 1, 1))]
+    
+    if not prediction_range.empty:
+        plt.figure(figsize=(10, 6))
+        plt.plot(prediction_range['date'], prediction_range['close'])
+        plt.xlabel('Date')
+        plt.ylabel('Close')
+        plt.title(f'{selected_company} Stock Prices')
+        plt.xticks(rotation=45)  # Rotate x-axis labels for readability
+        plt.tight_layout()
+        plt.show()
+    else:
+        print("No data to plot for the specified date range.")
 
 def main():
-    if os.path.exists(stocks_file_path):
-        exploration()
-    else:
-        print(f'File: {stocks_file_path} Not Found')
+    exploration()
 
 main()
