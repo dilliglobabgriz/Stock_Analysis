@@ -6,30 +6,29 @@ from tensorflow import keras
 import seaborn as sns
 import os
 from datetime import datetime
+from source.model_training.train_by_company import Train_By_Company
+from source.data_access.stock_data import Stock_Data
 
 import warnings
 warnings.filterwarnings("ignore")
 
-base_project_path: str = 'C:/Users/isaac/Winter25/stocks'
+sd = Stock_Data()
+data = sd.data
 
-stocks_file_path = os.path.join(base_project_path, 'data/all_stocks_5yr.csv')
-
+def testTrainByCompany():
+    tbc = Train_By_Company('MSFT')
+    tbc.visualizeResults()
 
 def testAndSampleData():
-    data = pd.read_csv(stocks_file_path, delimiter=',', on_bad_lines='skip')
     print(data.shape)
     print(data.sample(7))
 
 def dataInfo():
-    data = pd.read_csv(stocks_file_path, delimiter=',', on_bad_lines='skip')
     data['date'] = pd.to_datetime(data['date'])
     data.info()
 
 def main():
-    if os.path.exists(stocks_file_path):
-        dataInfo()
-    else:
-        print(f'File: {stocks_file_path} Not Found')
+    testTrainByCompany()
 
 if __name__ == '__main__':
     main()
