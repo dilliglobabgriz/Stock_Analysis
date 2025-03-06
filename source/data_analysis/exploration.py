@@ -76,6 +76,6 @@ def exploration():
         print("No data to plot for the specified date range.")
 
 def main():
-    exploration()
+    dataInfo()
 
 main()
