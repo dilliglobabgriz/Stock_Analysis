@@ -18,10 +18,24 @@ class Train_By_Company:
         self.scaler = MinMaxScaler(feature_range=(0,1))
         self.scaled_data = self.generateScaledData()
         self.training = int(np.ceil(len(self.dataset) * .95))
+
+    def __init__(self, company, dataset):
+        self.company = company
+        self.dataset = dataset
+        self.data = self.generateData(dataset)
+        self.selected_company_data = self.data[self.data['Name'] == self.company]
+        self.dataset = self.generateDataset()
+        self.scaler = MinMaxScaler(feature_range=(0,1))
+        self.scaled_data = self.generateScaledData()
+        self.training = int(np.ceil(len(self.dataset) * .95))
         
 
     def generateData(self):
         stock_data = Stock_Data()
+        return stock_data.data
+    
+    def generateData(self, dataset):
+        stock_data = Stock_Data(dataset)
         return stock_data.data
     
     def generateDataset(self):

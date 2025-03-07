@@ -19,6 +19,10 @@ def testTrainByCompany():
     tbc = Train_By_Company('MSFT')
     tbc.visualizeResults()
 
+def test_TBC_With_Alt_CSVs():
+    tbc = Train_By_Company('MSFT', 'yf_5year_1day.csv')
+    tbc.visualizeResults()
+
 def testAndSampleData():
     print(data.shape)
     print(data.sample(7))
@@ -28,7 +32,7 @@ def dataInfo():
     data.info()
 
 def main():
-    testTrainByCompany()
+    test_TBC_With_Alt_CSVs()
 
 if __name__ == '__main__':
     main()
